@@ -1,0 +1,80 @@
+/* background = 00272E */
+/* titles = EEF6F8 */
+/* data = B4A276 */
+
+
+/* CSS reset */
+* {
+    margin: 0;
+    box-sizing: border-box;
+    background-color: #00272E;
+}
+
+html {
+    font-size: 16px;
+    font-family: 'Lato', sans-serif;
+}
+
+body, h1, h2, h3, h4, h5, h6, p, ol, ul {
+    margin: 0;
+    padding: 0;
+    font-weight: normal;
+  }
+
+/* ad */
+
+.ad {
+    height: 100%;
+    width: 100%;
+}
+
+.title {
+    display: flex;
+    width: 80%;
+    color: #EEF6F8;
+    position: relative;
+    top: 4rem;
+    margin: 0 auto;
+    flex-direction: column;
+    flex-wrap: nowrap;
+}
+
+.details {
+    display: flex;
+    width: 80%;
+    position: relative;
+    margin: 8rem auto 0;
+    flex-wrap: wrap;
+    justify-content: space-between;
+}
+.detail {
+    border-bottom: #EEF6F8 1px solid;
+    width: 45%;
+    min-width: 18rem;
+    margin: 1rem 0;
+    /* padding-bottom: .5rem; */
+    display: flex;
+    flex-wrap: nowrap;
+    justify-content: space-between;
+}
+.detail_name {
+    color: #EEF6F8;
+    text-transform: capitalize;
+    margin-bottom: .5rem;
+}
+.detail_value {
+    color: #B4A276;
+    text-transform: capitalize;
+}
+
+.contact {
+    display: flex;
+    width: 80%;
+    position: relative;
+    margin: 3rem auto 0;
+    justify-content: space-around;
+}
+
+.contact_detail {
+    width: 50%;
+}
