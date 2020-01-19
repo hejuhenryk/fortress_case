@@ -39,7 +39,8 @@ body, h1, h2, h3, h4, h5, h6, p, ol, ul {
     flex-wrap: nowrap;
 }
 
-.details {
+.details, 
+.contacts {
     display: flex;
     width: 80%;
     position: relative;
@@ -47,16 +48,23 @@ body, h1, h2, h3, h4, h5, h6, p, ol, ul {
     flex-wrap: wrap;
     justify-content: space-between;
 }
+
+.contacts {
+    margin: 1rem auto 0;
+}
+.detail, .contact_detail {
+    width: 45%;
+    min-width: 16rem;
+    margin: 1rem 1rem 1rem 0;
+}
+
 .detail {
     border-bottom: #EEF6F8 1px solid;
-    width: 45%;
-    min-width: 18rem;
-    margin: 1rem 0;
-    /* padding-bottom: .5rem; */
     display: flex;
     flex-wrap: nowrap;
     justify-content: space-between;
 }
+
 .detail_name {
     color: #EEF6F8;
     text-transform: capitalize;
@@ -64,17 +72,8 @@ body, h1, h2, h3, h4, h5, h6, p, ol, ul {
 }
 .detail_value {
     color: #B4A276;
+    /* text-transform: capitalize; */
+}
+.detail_value::first-letter {
     text-transform: capitalize;
-}
-
-.contact {
-    display: flex;
-    width: 80%;
-    position: relative;
-    margin: 3rem auto 0;
-    justify-content: space-around;
-}
-
-.contact_detail {
-    width: 50%;
 }

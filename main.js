@@ -1,83 +1,98 @@
 import { numberToPrice, numberToPhoneNumber } from './helper.js'
 
 
-const data = {
-    title: ["Lekker, unik og moderne toppleilighet med balkong!", "Høy standard, 3-soverom, 2-bad."],
-    details: [
-        { "name": "fellesgjeld", "value": 300500 },
-        { "name": "omkostninger", "value": 15000 },
-        { "name": "totalpris", "value": 16300500 },
-        { "name": "boligtype", "value": "aksjeleilighel" },
-        { "name": "fellesgjeld", "value": 3050 },
-        { "name": "energimerking", "value": "l-røde" }
-    ],
-    contact: {
-        name: "Jan-Petter Grønborg",
-        phone: "92992929",
-    },
-    address: {
-        street: "Ivan Bjørndalsgate 34",
-        city: "Oslo",
-        zipCode: "0258"
-    }
-}
-const JSONdata = (JSON.stringify(data))
+fetch('./data.json', {method: 'GET'})
+    .then( resp => resp.json() )
+    .then( adObject => {
+        renderTitle(adObject)
+        renderDetails(adObject)
+        renderAdInfoContact(adObject.address.street, adObject.address.zipCode + ' ' + adObject.address.city, 'Adresse')
+        renderAdInfoContact(adObject.contact.name, numberToPhoneNumber(adObject.contact.phone), 'Kontakt')
+    })
+    .catch( err => console.log('Data not fetched' , err) )
 
 const DOMstr = {
     title: document.querySelector('.title'),
     details: document.querySelector('.details'),
-    contacts: document.querySelector('.contact')
+    contacts: document.querySelector('.contacts'),
+    template_detail: document.querySelector('#detail_template'),
+    template_contact: document.querySelector('#contact_template')
 }
 
-const setTitle = (jsonObj, where) => {
-    const obj = JSON.parse(jsonObj)
-    if (obj.title) {
-        obj.title.forEach(titlePart => {
+const renderAdInfoDetail = (detailName, detailValue) => {
+    const template = DOMstr.template_detail
+    const placeToAppend = DOMstr.details
+    const clonedTemplate = template.content.cloneNode(true)
+    clonedTemplate.querySelector('.detail_name').textContent = detailName
+    clonedTemplate.querySelector('.detail_value').textContent = detailValue
+    placeToAppend.appendChild(clonedTemplate)
+}
+
+const renderAdInfoContact = (lineOne, lineTwo, title) => {
+    const template = DOMstr.template_contact
+    const placeToAppend = DOMstr.contacts
+    const clonedTemplate = template.content.cloneNode(true)
+    clonedTemplate.querySelector('.detail_name').textContent = title
+    clonedTemplate.querySelector('.one').textContent = lineOne
+    clonedTemplate.querySelector('.two').textContent = lineTwo
+    placeToAppend.appendChild(clonedTemplate)
+}
+
+const renderTitle = (adInfo) => {
+    if (adInfo.title) {
+        adInfo.title.forEach(titlePart => {
             const titleH1 = document.createElement('h1')
             titleH1.textContent = titlePart
-            if (where)
-                where.appendChild(titleH1)
+            if (DOMstr.title)
+                DOMstr.title.appendChild(titleH1)
         });
     }
 }
 
-const setDetails = (jsonObj, where) => {
-    const obj = JSON.parse(jsonObj)
-    if (obj.details) {
-        obj.details.forEach(detInfo => {
-            let value
-            if (typeof detInfo.value === 'number') {
-                detInfo.value = numberToPrice(detInfo.value)
-            } 
-            const detailNode = `<div class="detail"><h2 class="detail_name">${detInfo.name}</h2><h2 class="detail_value">${detInfo.value}</h2></div>`
-            where.insertAdjacentHTML('beforeend', detailNode)
-        });
+const renderDetails = (adInfo) => {
+    if (adInfo.details) {
+        adInfo.details.forEach(detInfo => {
+            renderAdInfoDetail(detInfo.name, typeof detInfo.value === 'number' ? numberToPrice(detInfo.value) : detInfo.value)
+        })
     }
 }
-const setContact = (jsonObj, where) => {
-    const obj = JSON.parse(jsonObj)
+// const setDetails = (jsonObj, where) => {
+//     const obj = JSON.parse(jsonObj)
+//     if (obj.details) {
+//         obj.details.forEach(detInfo => {
+//             let value
+//             if (typeof detInfo.value === 'number') {
+//                 detInfo.value = numberToPrice(detInfo.value)
+//             } 
+//             const detailNode = `<div class="detail"><h2 class="detail_name">${detInfo.name}</h2><h2 class="detail_value">${detInfo.value}</h2></div>`
+//             where.insertAdjacentHTML('beforeend', detailNode)
+//         });
+//     }
+// }
+// const setContact = (jsonObj, where) => {
+//     const obj = JSON.parse(jsonObj)
 
-    if (obj.contact) {
-    const detailNode = `<div class="contact_detail"><h2 class="detail_name">Kontact</h2><h2 class="detail_value">${obj.contact.name}</h2><h2 class="detail_value">${numberToPhoneNumber(obj.contact.phone)}</h2></div>`
-        where.insertAdjacentHTML('beforeend', detailNode)
-    }
-}
-const setAddress = (jsonObj, where) => {
-    const obj = JSON.parse(jsonObj)
+//     if (obj.contact) {
+//     const detailNode = `<div class="contact_detail"><h2 class="detail_name">Kontact</h2><h2 class="detail_value">${obj.contact.name}</h2><h2 class="detail_value">${numberToPhoneNumber(obj.contact.phone)}</h2></div>`
+//         where.insertAdjacentHTML('beforeend', detailNode)
+//     }
+// }
+// const setAddress = (jsonObj, where) => {
+//     const obj = JSON.parse(jsonObj)
 
-    if (obj.address) {
-    const detailNode = `<div class="contact_detail"><h2 class="detail_name">Adresse</h2><h2 class="detail_value">${obj.address.street}</h2><h2 class="detail_value">${obj.address.zipCode} ${obj.address.city}</h2></div>`
-        where.insertAdjacentHTML('beforeend', detailNode)
-    }
-}
+//     if (obj.address) {
+//     const detailNode = `<div class="contact_detail"><h2 class="detail_name">Adresse</h2><h2 class="detail_value">${obj.address.street}</h2><h2 class="detail_value">${obj.address.zipCode} ${obj.address.city}</h2></div>`
+//         where.insertAdjacentHTML('beforeend', detailNode)
+//     }
+// }
 
 
-setTitle(JSONdata, DOMstr.title)
+// setTitle(JSONdata, DOMstr.title)
 
-setDetails(JSONdata, DOMstr.details)
+// setDetails(JSONdata, DOMstr.details)
 
-setContact(JSONdata, DOMstr.contacts)
-setAddress(JSONdata, DOMstr.contacts)
+// setContact(JSONdata, DOMstr.contacts)
+// setAddress(JSONdata, DOMstr.contacts)
 
 
 // const im = document.querySelector('#userImage')
